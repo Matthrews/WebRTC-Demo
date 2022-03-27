@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { useConversations } from "../contexts/ConversationContext";
 
 export default function OpenConversation() {
   const [text, setText] = useState("");
-  const lastMessageRef = useRef();
   const { sendMessage, selectConversation } = useConversations();
   function handleSubmit(e) {
     e.preventDefault();
@@ -17,11 +16,9 @@ export default function OpenConversation() {
     setText("");
   }
 
-  useEffect(() => {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ smooth: true });
-    }
-  }); // 每次都会运行
+  const setLastMessageRef = useCallback((node) => {
+    node && node.scrollIntoView({ smooth: true });
+  }, []);
 
   return (
     <div className="d-flex flex-column flex-grow-1">
@@ -32,7 +29,7 @@ export default function OpenConversation() {
               index + 1 === selectConversation.messages.length;
             return (
               <div
-                ref={lastMessage ? lastMessageRef : null}
+                ref={lastMessage ? setLastMessageRef : null}
                 key={index}
                 className={`my-1 d-flex flex-column ${
                   message.fromMe ? "align-self-end" : ""
