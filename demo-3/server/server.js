@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Document = require("./Document");
+
 mongoose.connect("mongodb://localhost/goolge-docs", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -13,24 +15,27 @@ const io = require("socket.io")(3001, {
   },
 });
 
-const Document = require("./Document");
 const defaultltValue = "";
 
 io.on("connection", (socket) => {
-  socket.on("get-document", (documentId) => {
-    const data = "";
+  socket.on("get-document", async (documentId) => {
+    const document = await findOrCreateDocument(documentId);
     socket.join(documentId);
 
-    socket.emit("load-document", data);
+    socket.emit("load-document", document.data);
 
     socket.on("send-change", (delta) => {
       socket.broadcast.to(documentId).emit("receive-change", delta);
+    });
+
+    socket.on("save-document", async (data) => {
+      await Document.findByIdAndUpdate(documentId, { data });
     });
   });
 });
 
 async function findOrCreateDocument(documentId) {
-  if (id === null) return;
+  if (documentId === null) return;
 
   const document = await Document.findById(documentId);
 
