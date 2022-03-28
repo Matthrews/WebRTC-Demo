@@ -5,7 +5,7 @@ import Contacts from "./Contacts";
 import NewConversationModal from "./NewConversationModal";
 import NewContactModal from "./NewContactModal";
 
-const CONVERSATIONS_KEY = "conersation";
+const CONVERSATIONS_KEY = "conversations";
 const CONTACTS_KEY = "contacts";
 
 export default function Sidebar({ id }) {
