@@ -20,9 +20,9 @@ navigator.mediaDevices
 
     peer.on("call", (call) => {
       call.answer(stream);
-      const video = document.createElement("video");
+      const v = document.createElement("video");
       call.on("stream", (userVideoStream) => {
-        addVideoStream(video, userVideoStream);
+        addVideoStream(v, userVideoStream);
       });
     });
 
@@ -31,11 +31,10 @@ navigator.mediaDevices
     });
   })
   .catch((err) => {
-    console.log("getUserMedia failed", err);
+    throw err;
   });
 
 socket.on("use-disconnect", (userId) => {
-  console.log("User disconnected", userId);
   if (peers[userId]) {
     peers[userId].close();
   }
@@ -47,13 +46,13 @@ peer.on("open", (id) => {
 
 function connectToNewUser(userId, stream) {
   const call = peer.call(userId, stream);
-  const video = document.createElement("video");
+  const d = document.createElement("video");
   call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream);
+    addVideoStream(d, userVideoStream);
   });
 
   call.on("close", () => {
-    video.remove();
+    d.remove();
   });
 
   peers[userId] = call;
