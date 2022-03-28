@@ -22,14 +22,14 @@ export function ConversationProvider({ id, children }) {
 
   const formattedConversations = conversations.map((conversation, index) => {
     const recipients = conversation.recipients.map((recipient) => {
-      const contact = contacts.find((contact) => recipient === contact.id);
+      const contact = contacts.find((c) => recipient === c.id);
       const name = (contact && contact.name) || recipient;
 
       return { id: recipient, name };
     });
 
     const messages = conversation.messages.map((message) => {
-      const contact = contacts.find((contact) => contact.id === message.sender);
+      const contact = contacts.find((c) => c.id === message.sender);
       const name = (contact && contact.name) || message.sender;
       const fromMe = id === message.sender;
 
@@ -98,8 +98,6 @@ export function ConversationProvider({ id, children }) {
     createConversation,
     sendMessage,
   };
-
-  console.log("ConversationContext", value);
 
   return (
     <ConversationContext.Provider value={value}>

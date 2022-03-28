@@ -5,7 +5,6 @@ io.on("connection", (socket) => {
   socket.join(id);
 
   socket.on("send-message", ({ recipients, text }) => {
-    console.log("socket", id, recipients, text);
     recipients.forEach((recipient) => {
       const newRecipients = recipients.filter((r) => r !== recipient);
       newRecipients.push(id);
